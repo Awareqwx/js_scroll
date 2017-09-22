@@ -21,32 +21,71 @@
 </head>
 <body>
 
-	Coding is <div id="magic"></div>
+	<div id="spin">Coding is <div id="magic"></div></div>
 
 	<script>
 
+		var rot = false;
+		var reset = false;
+
 		var words = ["fun", "exciting", "about not giving up", "being helpful", "being open", "what I learned at CodingDojo!"],
-			el = document.getElementById('magic'),
+			el = document.getElementById('magic')
+			rt = document.getElementById('spin'),
 			word_counter = 0,
-			character_counter = 0;
+			character_counter = 0,
+			ang = 0;
 
 		function updateText()
 		{
-			el.innerHTML = "<pre style=\"display:inline;\">" + el.innerHTML+words[word_counter][character_counter++] + "</pre>";
-
-			if(character_counter > words[word_counter].length)
+			if(!rot)
 			{
-				word_counter++; 	//choose a different word
-				character_counter = 0;	//start over with the first character of the word
-				el.innerHTML = '';  //set the html to be blank
+				if(character_counter < words[word_counter].length) {
+					el.innerHTML = "<pre style=\"display:inline;\">" + el.innerHTML+words[word_counter][character_counter++] + "</pre>";
+					console.log("Text");
+				}
+				else if(!reset)
+				{
+					character_counter++;
+					console.log("blah");
+				}
+				if(character_counter > words[word_counter].length)
+				{
+					if(!reset)
+					{
+						rot = true;
+					}
+					else
+					{
+						word_counter++; 	//choose a different word
+						character_counter = 0;	//start over with the first character of the word
+						el.innerHTML = "<pre style=\"display:inline;\"></pre>";  //set the html to be blank
 
-				//if we're displaying the last word, go back to the first word
-				if(word_counter == words.length)
-					word_counter = 0;
+						//if we're displaying the last word, go back to the first word
+						if(word_counter == words.length)
+							word_counter = 0;
+						reset = false;
+					}
+				}
+			}
+		}
+
+		function rotateText()
+		{
+			if(rot)
+			{
+				ang += 6;
+				rt.style = "display:inline-block; -ms-transform:rotate(" + ang + "deg); -webkit-transform:rotate(" + ang + "deg); transform:rotate(" + ang + "deg);";
+				if(ang == 360)
+				{
+					rot = false;
+					reset = true;
+					ang = 0;
+				}
 			}
 		}
 
 		setInterval(updateText,200);
+		setInterval(rotateText,20);
 
 	</script>
 
